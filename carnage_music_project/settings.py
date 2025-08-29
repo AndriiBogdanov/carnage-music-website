@@ -143,7 +143,10 @@ STATICFILES_DIRS = [
 ]
 
 # Настройка для whitenoise (для продакшена)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 # Media files (uploads)
 MEDIA_URL = '/media/'
@@ -179,6 +182,28 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
+    
+    # Настройки логирования для продакшена
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': 'INFO',
+                'propagate': False,
+            },
+        },
+    }
 
 # Настройки для больших файлов (до 4 ГБ)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 4 * 1024 * 1024 * 1024  # 4 ГБ в байтах
