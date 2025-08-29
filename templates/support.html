@@ -1,0 +1,415 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Donate & Support – Carnage Music{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основной контейнер */
+    .support-container {
+        min-height: 100vh;
+        background: #1a1a1a;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+        padding-top: 80px; /* Отступ для фиксированного header */
+    }
+
+    /* Размытый фон */
+    .blurred-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #1a1a1a;
+        background-image: url('https://carnagemusic.com/wp-content/uploads/2020/12/fon_lenty_radiatsiia_18526_2560x1080.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        opacity: 0.8;
+        z-index: 0;
+    }
+
+    /* Основная секция */
+    .main-content-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 80px);
+        padding: 60px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Карточка с контентом */
+    .support-card {
+        background: rgba(42, 42, 42, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 60px 50px;
+        max-width: 900px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .support-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffd700, transparent);
+        animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+
+    /* Заголовок */
+    .support-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 36px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 40px;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Описание */
+    .support-description {
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        line-height: 1.8;
+        color: #ffffff;
+        margin-bottom: 30px;
+        text-align: justify;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .support-description p {
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.8px;
+    }
+
+    /* Благодарность */
+    .thank-you {
+        font-family: 'Wadik', sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        color: #ffd700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 40px;
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+
+    /* Кнопка доната */
+    .donate-button {
+        display: inline-block;
+        padding: 18px 50px;
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        color: #000000;
+        text-decoration: none;
+        border-radius: 50px;
+        font-family: 'Wadik', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .donate-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .donate-button:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+        color: #000000;
+    }
+
+    .donate-button:hover::before {
+        left: 100%;
+    }
+
+    /* Способы оплаты */
+    .payment-methods {
+        margin-top: 40px;
+    }
+
+    .payment-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #cccccc;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
+
+    .payment-icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .payment-icon {
+        width: 50px;
+        height: 35px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .payment-icon:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .payment-icon i {
+        font-size: 20px;
+        color: #ffffff;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .support-card {
+            padding: 40px 30px;
+        }
+
+        .support-title {
+            font-size: 28px;
+        }
+
+        .support-description {
+            font-size: 16px;
+        }
+
+        .thank-you {
+            font-size: 20px;
+        }
+
+        .donate-button {
+            padding: 15px 40px;
+            font-size: 18px;
+        }
+
+        .payment-icons {
+            gap: 10px;
+        }
+
+        .payment-icon {
+            width: 45px;
+            height: 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-content-section {
+            padding: 40px 15px;
+        }
+
+        .support-card {
+            padding: 30px 20px;
+        }
+
+        .support-title {
+            font-size: 24px;
+        }
+
+        .support-description {
+            font-size: 14px;
+        }
+
+        .thank-you {
+            font-size: 18px;
+        }
+
+        .donate-button {
+            padding: 12px 30px;
+            font-size: 16px;
+        }
+    }
+
+    /* Social icons styles */
+    .social-section {
+        text-align: center;
+        margin-top: 40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .social-icon {
+        color: #ffffff;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        padding: 6px;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        will-change: transform, box-shadow, background;
+        backface-visibility: hidden;
+    }
+
+    .social-icon:hover {
+        color: #cccccc;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px) scale(1.1);
+    }
+
+    /* Copyright under social icons */
+    .copyright {
+        font-size: 11px;
+        color: #ffffff;
+        letter-spacing: 2.5px;
+        font-weight: 900;
+        font-family: 'Gothic', monospace;
+    }
+
+    /* Beatport SVG icon */
+    .beatport-icon {
+        fill: currentColor;
+        width: 14px;
+        height: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="support-container">
+    <!-- Размытый фон -->
+    <div class="blurred-background"></div>
+
+    <!-- Основная секция -->
+    <div class="main-content-section">
+        <div class="support-card">
+            <!-- Заголовок -->
+            <div class="support-title">Donate & Support</div>
+
+            <!-- Описание -->
+            <div class="support-description">
+                <p>Carnage Music Label is committed to promoting the hard work and talent of our artists, who strive to create music that resonates with people. We invest a great deal of effort into the development of electronic music and our artists' success.</p>
+                
+                <p>If you would like to support our mission and help us continue to grow, there's an option to make a donation of your choosing here.</p>
+            </div>
+
+            <!-- Благодарность -->
+            <div class="thank-you">Thank You!</div>
+
+            <!-- Кнопка доната -->
+            <a href="#" class="donate-button">Donate</a>
+
+            <!-- Способы оплаты -->
+            <div class="payment-methods">
+                <div class="payment-title">Secure Payment Methods</div>
+                <div class="payment-icons">
+                    <div class="payment-icon">
+                        <i class="fab fa-cc-visa"></i>
+                    </div>
+                    <div class="payment-icon">
+                        <i class="fab fa-cc-mastercard"></i>
+                    </div>
+                    <div class="payment-icon">
+                        <i class="fab fa-cc-amex"></i>
+                    </div>
+                    <div class="payment-icon">
+                        <i class="fab fa-cc-discover"></i>
+                    </div>
+                    <div class="payment-icon">
+                        <i class="fab fa-paypal"></i>
+                    </div>
+                    <div class="payment-icon">
+                        <i class="fab fa-apple-pay"></i>
+                    </div>
+                    <div class="payment-icon">
+                        <i class="fab fa-google-pay"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Social Section -->
+    <div class="social-section">
+        <div class="social-icons">
+            <a href="https://www.facebook.com/profile.php?id=61567616762007" class="social-icon" target="_blank" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.instagram.com/crngmusic/" class="social-icon" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@the.world.is.my0?_t=8rEKf0UpaPI&_r=1" class="social-icon" target="_blank" aria-label="TikTok">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://soundcloud.com/carnagemusiclabel" class="social-icon" target="_blank" aria-label="SoundCloud">
+                <i class="fab fa-soundcloud"></i>
+            </a>
+            <a href="https://www.beatport.com/label/crng-music/126103" class="social-icon" target="_blank" aria-label="Beatport">
+                <svg class="beatport-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1036 1200">
+                    <path d="M817.7,763.3c0,120-95.8,217-217,217c-120,0-215.8-94.6-215.8-217c0-57.6,21.8-108.5,56.4-146.7L294.6,763.3 l-77-77l165.5-163.7c22.4-22.4,33.9-51.5,33.9-83.6V233.6h108.5V439c0,63-22.4,116.4-66.1,160l-4.9,4.8 c38.2-35.2,90.3-56.4,146.1-56.4C723.8,547.5,817.7,645.1,817.7,763.3z M719.5,763.3c0-64.3-53.3-116.4-118.8-116.4 c-66.1,0-117.6,54.6-117.6,116.4c0,63.6,52.1,117.6,117.6,117.6C668.6,880.9,719.5,825.8,719.5,763.3z"/>
+                </svg>
+            </a>
+            <a href="https://www.youtube.com/channel/UCyLr2UcaesVcRq5I2VRuqPA" class="social-icon" target="_blank" aria-label="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" class="social-icon" target="_blank" aria-label="Spotify">
+                <i class="fab fa-spotify"></i>
+            </a>
+            <a href="#" class="social-icon" target="_blank" aria-label="Apple Music">
+                <i class="fab fa-apple"></i>
+            </a>
+            <a href="#" class="social-icon" target="_blank" aria-label="Bandcamp">
+                <i class="fab fa-bandcamp"></i>
+            </a>
+        </div>
+        <div class="copyright">
+            ©2025 CARNAGE MUSIC
+        </div>
+    </div>
+  {% endblock %}

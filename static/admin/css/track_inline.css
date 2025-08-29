@@ -1,0 +1,135 @@
+/* Стили для TrackInline - поля загрузки аудио */
+
+/* Основное поле загрузки аудио */
+.audio-file-input {
+    border: 2px solid #ff6b35 !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    background-color: #fff3e0 !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+.audio-file-input:hover {
+    border-color: #e55a2b !important;
+    background-color: #ffe0b2 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2) !important;
+}
+
+.audio-file-input:focus {
+    border-color: #d84315 !important;
+    background-color: #ffcc80 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1) !important;
+}
+
+/* Стили для динамически добавленных полей */
+.inline-group .inline-related .form-row .audio-file-input {
+    border: 2px solid #ff6b35 !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    background-color: #fff3e0 !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+/* Подсказка для поля */
+.audio-file-input::before {
+    content: "🎵 Загрузите аудиофайл";
+    color: #d84315;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Стили для успешной загрузки */
+.audio-file-input:has(input[type="file"]:valid) {
+    border-color: #4caf50 !important;
+    background-color: #e8f5e8 !important;
+}
+
+.audio-file-input:has(input[type="file"]:valid)::before {
+    content: "✅ Аудиофайл загружен";
+    color: #2e7d32;
+}
+
+/* Анимация при загрузке */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.audio-file-input:focus {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* Стили для таблицы треков */
+.inline-group .inline-related table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inline-group .inline-related table th {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+    padding: 12px 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.inline-group .inline-related table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/* Стили для кнопки "Добавить ещё один Трек" */
+.add-row a {
+    background-color: #ff6b35 !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+    margin-top: 10px !important;
+}
+
+.add-row a:hover {
+    background-color: #e55a2b !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3) !important;
+}
+
+/* Стили для заголовков полей */
+.inline-group .inline-related table th:contains("Audio file"),
+.inline-group .inline-related table th:contains("Аудио файл") {
+    background-color: #fff3e0;
+    color: #d84315;
+    font-weight: 700;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .audio-file-input {
+        padding: 8px !important;
+        font-size: 14px !important;
+    }
+    
+    .inline-group .inline-related table {
+        font-size: 14px;
+    }
+    
+    .inline-group .inline-related table th,
+    .inline-group .inline-related table td {
+        padding: 8px 4px;
+    }
+} 

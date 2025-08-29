@@ -1,0 +1,19 @@
+/**
+* Theme Name: Sonaar Child
+* Description: This is a child theme of Sonaar.
+* Author: <a href="https://sonaar.io">Sonaar Music</a>
+* Template: sonaar
+* Version: 4.27
+*/
+
+@font-face {
+    font-family: 'wadikregular';
+    src: url('http://www.carnagemusic.com/wp-content/webfonts/WADIK.eot');
+    src: url('http://www.carnagemusic.com/wp-content/webfonts/WADIK.eot?#iefix') format('embedded-opentype'),
+         url('http://www.carnagemusic.com/wp-content/webfonts/WADIK.woff') format('woff'),
+         url('http://www.carnagemusic.com/wp-content/webfonts/WADIK.ttf') format('truetype'),
+         url('../../../../www.carnagemusic.com/wp-content/webfonts/WADIK.html#wadikregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+ 
+}

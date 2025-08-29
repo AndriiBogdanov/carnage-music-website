@@ -1,0 +1,7 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+carnagemusic.com	TRUE	/	FALSE	1999999999	PHPSESSID	7t9m6q9o016n19fhhs4d9c6art
+.vimeo.com	TRUE	/	FALSE	1999999999	__cf_bm	5SdHJ8wYsY.nOLBorQFv5Js1L4DNUk1fj15LCpZvhDI-1754645157-1.0.1.1-2OT9uqH5MRD_37rf8Gp_DEOTWjLrBaRL6yj5feoR2igehLQCBZMy36PPH0gWRPjn
+.vimeo.com	TRUE	/	FALSE	1999999999	_cfuvid	6tfy9eJIAE7naBUV0ARtv35qMbonj_Dy1khzWC8u66g-1754645157382-0.0.1.1-604800000
+player.vimeo.com	TRUE	/	FALSE	1999999999	SameSite	None
+

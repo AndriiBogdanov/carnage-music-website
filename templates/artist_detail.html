@@ -1,0 +1,1130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ artist.name }} - Carnage Music{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основной контейнер */
+    .artist-container {
+        min-height: 100vh;
+        background: #2a2a2a;
+        color: #ffffff;
+        padding: 80px 0 0; /* Возвращаю нормальный отступ от хедера */
+        overflow-x: hidden;
+    }
+
+    .artist-hero {
+        max-width: 1600px; /* Увеличиваю общую ширину контейнера */
+        margin: 0 auto;
+        padding: 0 40px;
+        display: grid;
+        grid-template-columns: 650px 1fr; /* Устанавливаю колонку 650px */
+        gap: 120px; /* Увеличиваю расстояние между фото и описанием */
+        align-items: start;
+        margin-bottom: 30px; /* Уменьшаю отступ под секцией артиста */
+    }
+
+    /* Фотография артиста */
+    .artist-photo {
+        width: 650px; /* Устанавливаю размер фото 650px */
+        height: 650px; /* Устанавливаю размер фото 650px */
+        position: relative;
+        border-radius: 0;
+        overflow: hidden;
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
+    }
+
+    .artist-photo:hover {
+        filter: grayscale(0%);
+    }
+
+    .artist-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Информация об артисте */
+    .artist-info {
+        padding-top: 40px; /* Возвращаю нормальный отступ */
+        text-align: center; /* Центрирую весь блок информации */
+    }
+
+    .artist-name {
+        font-family: 'Wadik', sans-serif;
+        font-size: 37px; /* Уменьшаю размер до 37 пикселей */
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 0.9;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: -2px;
+        text-align: center; /* Центрирую имя */
+    }
+
+    .artist-slogan {
+        font-family: 'Square Peg', cursive; /* Заменяю шрифт на Square Peg */
+        font-size: 25px; /* Уменьшаю размер до 25 пикселей */
+        color: #ffffff;
+        margin-bottom: 2.5rem;
+        font-weight: 400; /* Нормальный вес для рукописного шрифта */
+        text-transform: uppercase; /* Возвращаю uppercase */
+        letter-spacing: 1px; /* Уменьшаю межбуквенное расстояние */
+        border-bottom: 1px solid #444;
+        padding-bottom: 20px;
+        text-align: center; /* Центрирую слоган */
+    }
+
+    .artist-bio {
+        font-size: 11px; /* Возвращаю прежний размер 11px */
+        line-height: 20px; /* Увеличиваю высоту строки с 16px до 20px */
+        letter-spacing: 2px; /* Устанавливаю межбуквенное расстояние 2px */
+        font-weight: 600; /* Делаю текст жирным */
+        color: #cccccc;
+        margin-bottom: 3rem;
+        max-width: 700px; /* Увеличиваю ширину описания */
+        text-align: center; /* Центрирую биографию */
+        margin-left: auto; /* Центрирую блок */
+        margin-right: auto; /* Центрирую блок */
+    }
+
+    /* Раздел социальных сетей */
+    .social-section {
+        margin-bottom: 3rem;
+        text-align: center;
+        max-width: 700px; /* Увеличиваю ширину социальных сетей */
+        margin-left: auto; /* Центрирую блок */
+        margin-right: auto; /* Центрирую блок */
+        margin-bottom: 3rem; /* Сохраняю отступ снизу */
+    }
+
+    .social-heading {
+        font-family: 'Wadik', sans-serif; /* Меняю шрифт на Wadik */
+        font-size: 14px; /* Устанавливаю размер 14 пикселей */
+        font-weight: 400; /* Делаю нормальным весом */
+        color: #ffffff; /* Делаю заголовок белым */
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 1.2rem;
+        text-align: center;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: 1px solid #ffffff; /* Делаю границы белыми */
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff; /* Делаю иконки белыми */
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 16px;
+    }
+
+    .social-icon:hover {
+        background: #ffffff;
+        color: #2a2a2a;
+        border-color: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    /* Раздел релизов */
+    .releases-section {
+        background: #2a2a2a;
+        padding: 30px 40px; /* Уменьшаю верхний отступ */
+        border-top: 1px solid #333;
+    }
+
+    .releases-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+    .releases-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 40px; /* Вертикальный отступ между релизами */
+    }
+
+    .release-card {
+        background: #2a2a2a;
+        border: 1px solid #333;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        display: flex; /* Горизонтальный макет */
+        align-items: stretch; /* Растягиваем элементы по высоте */
+        gap: 30px;
+        padding: 0;
+    }
+
+    .release-card:hover {
+        border-color: #555;
+        transform: translateY(-3px);
+    }
+
+    .release-artwork {
+        width: 300px; /* Фиксированная ширина обложки */
+        min-height: 300px; /* Минимальная высота обложки */
+        height: auto; /* Автоматическая высота */
+        flex-shrink: 0; /* Не сжимается */
+        position: relative;
+        overflow: hidden;
+        margin: 0; /* Убираю центрирование */
+        align-self: stretch; /* Растягиваем по высоте родителя */
+    }
+
+    .release-artwork img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Обеспечиваю правильное отображение без растягивания */
+        filter: grayscale(100%);
+        transition: filter 0.3s ease, transform 0.3s ease;
+        position: absolute; /* Абсолютное позиционирование для растягивания */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .release-card:hover .release-artwork img {
+        filter: grayscale(0%);
+        transform: scale(1.05);
+    }
+
+    .release-info {
+        padding: 30px;
+        flex: 1; /* Занимает оставшееся место */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .release-title {
+        font-size: 1.8rem; /* Увеличиваю размер заголовка */
+        font-weight: 600;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem; /* Увеличиваю отступ */
+    }
+
+    .release-tracks {
+        margin-top: 0; /* Убираю отступ сверху */
+    }
+
+    .track-item {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* Увеличиваю gap */
+        padding: 12px 0; /* Увеличиваю вертикальные отступы */
+        border-bottom: 1px solid #444;
+        font-size: 1rem; /* Увеличиваю размер шрифта */
+        color: #ccc;
+        flex-wrap: wrap;
+    }
+
+    .track-item:last-child {
+        border-bottom: none;
+    }
+
+    .track-number {
+        width: 20px;
+        text-align: center;
+        font-weight: 600;
+        color: #666;
+        flex-shrink: 0;
+    }
+
+    .track-title {
+        flex: 0 0 200px;
+        font-weight: 500;
+        font-size: 1rem; /* Фиксированный размер */
+    }
+
+    .track-links {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .track-link {
+        width: 25px;
+        height: 25px;
+        background: transparent;
+        border: 1px solid #555;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        text-decoration: none;
+        font-size: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .track-link:hover {
+        background: #ffffff;
+        color: #2a2a2a;
+        border-color: #ffffff;
+    }
+
+    /* Аудио плеер для треков */
+    .track-audio-player {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin: 8px 0;
+        transition: all 0.3s ease;
+        min-height: 50px;
+        flex: 1;
+    }
+
+    .track-audio-player:hover {
+        border-color: #555;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Левая секция - кнопка и информация */
+    .track-player-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        min-width: 160px;
+    }
+
+    .track-play-button {
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: 2px solid #666;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #ccc;
+        font-size: 11px;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .track-play-button:hover {
+        border-color: #ffffff;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .track-play-button.playing {
+        border-color: #ffffff;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .track-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        min-width: 0;
+    }
+
+    .track-title-mini {
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .track-artist-mini {
+        font-size: 10px;
+        color: #999;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Центральная секция - таймлайн */
+    .track-player-center {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .track-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .track-progress-bar {
+        height: 3px;
+        background: #333;
+        border-radius: 2px;
+        position: relative;
+        cursor: pointer;
+        overflow: visible;
+    }
+
+    .track-progress-bar:hover {
+        background: #444;
+    }
+
+    .track-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #666, #999);
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.1s ease;
+        position: relative;
+    }
+
+    .track-progress-handle {
+        position: absolute;
+        left: 0%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 10px;
+        background: #ffffff;
+        border-radius: 50%;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: left 0.1s ease, opacity 0.2s ease;
+        z-index: 10;
+    }
+
+    .track-progress-bar:hover .track-progress-handle {
+        opacity: 1;
+    }
+
+    .track-time-display {
+        display: flex;
+        justify-content: space-between;
+        font-size: 9px;
+        color: #777;
+        font-weight: 500;
+    }
+
+    .track-current-time,
+    .track-duration {
+        font-family: 'Courier New', monospace;
+    }
+
+    /* Правая секция - громкость */
+    .track-player-right {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        min-width: 100px;
+    }
+
+    .track-volume-control {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .track-volume-button {
+        width: 20px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 9px;
+        transition: color 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .track-volume-button:hover {
+        color: #ccc;
+    }
+
+    .track-volume-slider {
+        flex: 1;
+        height: 2px;
+        background: #333;
+        border-radius: 1px;
+        position: relative;
+        cursor: pointer;
+        min-width: 50px;
+    }
+
+    .track-volume-slider:hover {
+        background: #444;
+    }
+
+    .track-volume-bar {
+        height: 100%;
+        background: #666;
+        border-radius: 1px;
+        width: 70%;
+        transition: width 0.1s ease;
+    }
+
+    .track-volume-handle {
+        position: absolute;
+        top: 50%;
+        left: 70%;
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        transition: left 0.1s ease, opacity 0.2s ease;
+        z-index: 10;
+        opacity: 0;
+    }
+
+    .track-volume-slider:hover .track-volume-handle {
+        opacity: 1;
+    }
+
+    /* Скрытый нативный аудио элемент */
+    .track-audio-element {
+        display: none;
+    }
+
+    /* Навигация между артистами */
+    .artist-navigation {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        display: flex;
+        gap: 1rem;
+        z-index: 1000;
+    }
+
+    .nav-button {
+        padding: 12px 20px;
+        background: rgba(42, 42, 42, 0.9);
+        color: #ffffff;
+        text-decoration: none;
+        border: 1px solid #444;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .nav-button:hover {
+        background: #ffffff;
+        color: #2a2a2a;
+        border-color: #ffffff;
+    }
+
+    .nav-button.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 1200px) {
+        .artist-hero {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            text-align: center;
+        }
+
+        .artist-photo {
+            width: 400px; /* Пропорционально уменьшаю для планшетов */
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .artist-name {
+            font-size: 28px; /* Пропорционально уменьшаю для планшетов */
+        }
+
+        .releases-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .release-card {
+            align-items: stretch; /* Растягиваем элементы по высоте */
+        }
+
+        .release-artwork {
+            min-height: 280px; /* Немного меньше для планшетов */
+            height: auto; /* Автоматическая высота */
+            align-self: stretch; /* Растягиваем по высоте */
+        }
+    }
+
+    @media (max-width: 768px) {
+        .artist-container {
+            padding: 80px 0 0; /* Нормальный отступ */
+        }
+
+        .artist-hero {
+            padding: 0 20px;
+            gap: 30px;
+        }
+
+        .artist-photo {
+            width: 350px;
+            height: 350px;
+        }
+
+        .artist-name {
+            font-size: 20px; /* Пропорционально уменьшаю для мобильных */
+            letter-spacing: -1px;
+        }
+
+        .artist-slogan {
+            font-size: 18px; /* Пропорционально уменьшаю слоган для мобильных устройств */
+        }
+
+        .releases-section {
+            padding: 60px 20px;
+        }
+
+        .social-icons {
+            justify-content: center;
+        }
+
+        .artist-navigation {
+            position: static;
+            margin-top: 3rem;
+            justify-content: center;
+            padding: 0 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .artist-photo {
+            width: 250px; /* Пропорционально уменьшаю для маленьких экранов */
+            height: 250px;
+        }
+
+        .artist-name {
+            font-size: 16px; /* Пропорционально уменьшаю для маленьких экранов */
+        }
+
+        .releases-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .nav-button {
+            padding: 10px 15px;
+            font-size: 0.8rem;
+        }
+
+        .release-card {
+            flex-direction: column; /* Вертикальный макет на мобильных */
+            gap: 20px;
+            align-items: stretch; /* Растягиваем по ширине */
+        }
+
+        .release-artwork {
+            width: 100%; /* Полная ширина на мобильных */
+            min-height: 250px; /* Минимальная высота на мобильных */
+            height: auto; /* Автоматическая высота */
+            align-self: stretch; /* Растягиваем по ширине */
+        }
+
+        .release-info {
+            padding: 20px;
+        }
+
+        .release-title {
+            font-size: 1.4rem; /* Меньший размер на мобильных */
+        }
+
+        .releases-section {
+            padding: 40px 20px;
+        }
+
+        .track-audio-player {
+            flex-direction: column;
+            gap: 8px;
+            padding: 8px;
+            min-height: auto;
+            margin: 6px 0;
+        }
+        
+        .track-play-button {
+            width: 24px;
+            height: 24px;
+            font-size: 8px;
+        }
+        
+        .track-progress-bar {
+            height: 2px;
+        }
+        
+        .track-time-display {
+            font-size: 8px;
+        }
+
+        .track-player-left {
+            min-width: auto;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .track-player-center {
+            width: 100%;
+        }
+
+        .track-player-right {
+            min-width: auto;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .track-volume-control {
+            max-width: 150px;
+        }
+
+        .track-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .track-title {
+            flex: none;
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="artist-container">
+    <!-- Главная секция с фото и информацией -->
+    <div class="artist-hero">
+        <!-- Фотография артиста -->
+        <div class="artist-photo">
+            {% if artist.photo %}
+                <img src="{{ artist.photo.url }}" alt="{{ artist.name }}" loading="lazy">
+            {% else %}
+                <img src="{% static 'images/default-artist.jpg' %}" alt="{{ artist.name }}" loading="lazy">
+            {% endif %}
+        </div>
+
+        <!-- Информация об артисте -->
+        <div class="artist-info">
+            <h1 class="artist-name">{{ artist.name }}</h1>
+            
+            {% if artist.slogan %}
+                <div class="artist-slogan">{{ artist.slogan }}</div>
+            {% endif %}
+
+            {% if artist.bio %}
+                <div class="artist-bio">
+                    {{ artist.bio|linebreaks }}
+                </div>
+            {% endif %}
+
+            <!-- Социальные сети -->
+            {% if artist.facebook_url or artist.instagram_url or artist.twitter_url or artist.tiktok_url or artist.youtube_url or artist.spotify_url or artist.soundcloud_url or artist.beatport_url or artist.bandcamp_url %}
+            <div class="social-section">
+                <div class="social-heading">Artist Socials:</div>
+                <div class="social-icons">
+                    {% if artist.facebook_url %}
+                        <a href="{{ artist.facebook_url }}" target="_blank" class="social-icon" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    {% endif %}
+                    {% if artist.instagram_url %}
+                        <a href="{{ artist.instagram_url }}" target="_blank" class="social-icon" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    {% endif %}
+                    {% if artist.twitter_url %}
+                        <a href="{{ artist.twitter_url }}" target="_blank" class="social-icon" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    {% endif %}
+                    {% if artist.tiktok_url %}
+                        <a href="{{ artist.tiktok_url }}" target="_blank" class="social-icon" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    {% endif %}
+                    {% if artist.youtube_url %}
+                        <a href="{{ artist.youtube_url }}" target="_blank" class="social-icon" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    {% endif %}
+                    {% if artist.spotify_url %}
+                        <a href="{{ artist.spotify_url }}" target="_blank" class="social-icon" title="Spotify">
+                            <i class="fab fa-spotify"></i>
+                        </a>
+                    {% endif %}
+                    {% if artist.soundcloud_url %}
+                        <a href="{{ artist.soundcloud_url }}" target="_blank" class="social-icon" title="SoundCloud">
+                            <i class="fab fa-soundcloud"></i>
+                        </a>
+                    {% endif %}
+                    {% if artist.beatport_url %}
+                        <a href="{{ artist.beatport_url }}" target="_blank" class="social-icon" title="Beatport">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1036 1200" fill="currentColor">
+                                <path d="M817.7,763.3c0,120-95.8,217-217,217c-120,0-215.8-94.6-215.8-217c0-57.6,21.8-108.5,56.4-146.7L294.6,763.3 l-77-77l165.5-163.7c22.4-22.4,33.9-51.5,33.9-83.6V233.6h108.5V439c0,63-22.4,116.4-66.1,160l-4.9,4.8 c38.2-35.2,90.3-56.4,146.1-56.4C723.8,547.5,817.7,645.1,817.7,763.3z M719.5,763.3c0-64.3-53.3-116.4-118.8-116.4 c-66.1,0-117.6,54.6-117.6,116.4c0,63.6,52.1,117.6,117.6,117.6C668.6,880.9,719.5,825.8,719.5,763.3z"/>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    {% if artist.bandcamp_url %}
+                        <a href="{{ artist.bandcamp_url }}" target="_blank" class="social-icon" title="Bandcamp">
+                            <i class="fab fa-bandcamp"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Секция релизов -->
+    {% if all_releases %}
+    <div class="releases-section">
+        <div class="releases-container">
+            <h2 class="section-title">New Releases:</h2>
+            <div class="releases-grid">
+                {% for release in all_releases %}
+                <div class="release-card">
+                    <div class="release-artwork">
+                        {% if release.cover %}
+                            <img src="{{ release.cover.url }}" alt="{{ release.title }}" loading="lazy">
+                    {% else %}
+                            <div style="width:100%;height:100%;background:#333;"></div>
+                    {% endif %}
+                    </div>
+                    <div class="release-info">
+                        <h3 class="release-title">{{ release.title }}</h3>
+                        
+                        {% if release.unique_tracks %}
+                        <div class="release-tracks">
+                            {% for track in release.unique_tracks %}
+                            <div class="track-item">
+                                <div class="track-number">{{ forloop.counter|stringformat:"02d" }}</div>
+                                <div class="track-title">{{ track.title }}</div>
+                                
+                                <!-- Аудио плеер для трека -->
+                                {% if track.audio_file %}
+                                <div class="track-audio-player" data-track-id="{{ track.id }}">
+                                    <div class="track-player-left">
+                                        <button class="track-play-button" data-action="play">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                        <div class="track-info">
+                                            <div class="track-title-mini">{{ track.title }}</div>
+                                            <div class="track-artist-mini">{{ artist.name }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="track-player-center">
+                                        <div class="track-timeline">
+                                            <div class="track-progress-bar">
+                                                <div class="track-progress-fill"></div>
+                                                <div class="track-progress-handle"></div>
+                                            </div>
+                                            <div class="track-time-display">
+                                                <span class="track-current-time">0:00</span>
+                                                <span class="track-duration">0:00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="track-player-right">
+                                        <div class="track-volume-control">
+                                            <button class="track-volume-button" data-action="mute">
+                                                <i class="fas fa-volume-up"></i>
+                                            </button>
+                                                                    <div class="track-volume-slider">
+                            <div class="track-volume-bar"></div>
+                            <div class="track-volume-handle"></div>
+                        </div>
+                                        </div>
+                                    </div>
+                                    <audio class="track-audio-element" preload="metadata">
+                                        <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+                                    </audio>
+                                </div>
+                                {% endif %}
+
+                                <div class="track-links">
+                                    {% if track.spotify_url %}
+                                        <a href="{{ track.spotify_url }}" target="_blank" class="track-link" title="Spotify">
+                                            <i class="fab fa-spotify"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if track.apple_music_url %}
+                                        <a href="{{ track.apple_music_url }}" target="_blank" class="track-link" title="Apple Music">
+                                            <i class="fab fa-apple"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if track.youtube_url %}
+                                        <a href="{{ track.youtube_url }}" target="_blank" class="track-link" title="YouTube">
+                                            <i class="fab fa-youtube"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if track.soundcloud_url %}
+                                        <a href="{{ track.soundcloud_url }}" target="_blank" class="track-link" title="SoundCloud">
+                                            <i class="fab fa-soundcloud"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if track.beatport_url %}
+                                        <a href="{{ track.beatport_url }}" target="_blank" class="track-link" title="Beatport">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 1036 1200" fill="currentColor">
+                                                <path d="M817.7,763.3c0,120-95.8,217-217,217c-120,0-215.8-94.6-215.8-217c0-57.6,21.8-108.5,56.4-146.7L294.6,763.3 l-77-77l165.5-163.7c22.4-22.4,33.9-51.5,33.9-83.6V233.6h108.5V439c0,63-22.4,116.4-66.1,160l-4.9,4.8 c38.2-35.2,90.3-56.4,146.1-56.4C723.8,547.5,817.7,645.1,817.7,763.3z M719.5,763.3c0-64.3-53.3-116.4-118.8-116.4 c-66.1,0-117.6,54.6-117.6,116.4c0,63.6,52.1,117.6,117.6,117.6C668.6,880.9,719.5,825.8,719.5,763.3z"/>
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Навигация между артистами -->
+    <div class="artist-navigation">
+        {% if prev_artist %}
+            <a href="{% url 'artists:artist_detail' prev_artist.slug %}" class="nav-button">
+                ← {{ prev_artist.name }}
+            </a>
+        {% endif %}
+
+        {% if next_artist %}
+            <a href="{% url 'artists:artist_detail' next_artist.slug %}" class="nav-button">
+                {{ next_artist.name }} →
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let currentPlayer = null;
+    let currentAudio = null;
+
+    // Функция для форматирования времени
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Инициализация всех плееров треков
+    document.querySelectorAll('.track-audio-player').forEach(player => {
+        const audio = player.querySelector('.track-audio-element');
+        const playButton = player.querySelector('.track-play-button');
+        const playIcon = playButton.querySelector('i');
+        const progressBar = player.querySelector('.track-progress-fill');
+        const progressContainer = player.querySelector('.track-progress-bar');
+        const currentTimeDisplay = player.querySelector('.track-current-time');
+        const durationDisplay = player.querySelector('.track-duration');
+        const volumeButton = player.querySelector('.track-volume-button');
+        const volumeIcon = volumeButton.querySelector('i');
+        const volumeBar = player.querySelector('.track-volume-bar');
+        const volumeSlider = player.querySelector('.track-volume-slider');
+
+        // Установка начальной громкости
+        audio.volume = 0.7;
+        volumeBar.style.width = '70%';
+
+        // Обновление времени при загрузке метаданных
+        audio.addEventListener('loadedmetadata', function() {
+            durationDisplay.textContent = formatTime(audio.duration);
+        });
+
+        // Кнопка воспроизведения/паузы
+        playButton.addEventListener('click', function() {
+            if (currentAudio && currentAudio !== audio && !currentAudio.paused) {
+                currentAudio.pause();
+                const prevPlayer = currentPlayer;
+                const prevPlayButton = prevPlayer.querySelector('.track-play-button');
+                const prevPlayIcon = prevPlayButton.querySelector('i');
+                prevPlayButton.classList.remove('playing');
+                prevPlayIcon.className = 'fas fa-play';
+            }
+
+            if (audio.paused) {
+                audio.play();
+                playButton.classList.add('playing');
+                playIcon.className = 'fas fa-pause';
+                currentPlayer = player;
+                currentAudio = audio;
+            } else {
+                audio.pause();
+                playButton.classList.remove('playing');
+                playIcon.className = 'fas fa-play';
+                currentPlayer = null;
+                currentAudio = null;
+            }
+        });
+
+        // Обновление прогресса
+        audio.addEventListener('timeupdate', function() {
+            if (audio.duration && !isNaN(audio.duration)) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = progress + '%';
+                currentTimeDisplay.textContent = formatTime(audio.currentTime);
+                
+                // Перемещаем handle (белый круг)
+                const handle = player.querySelector('.track-progress-handle');
+                if (handle) {
+                    handle.style.left = progress + '%';
+                }
+            }
+        });
+
+        // Завершение воспроизведения
+        audio.addEventListener('ended', function() {
+            playButton.classList.remove('playing');
+            playIcon.className = 'fas fa-play';
+            progressBar.style.width = '0%';
+            currentTimeDisplay.textContent = '0:00';
+            currentPlayer = null;
+            currentAudio = null;
+        });
+
+        // Функция для обновления прогресса
+        function updateProgress(e) {
+            if (audio.duration && !isNaN(audio.duration)) {
+                const rect = progressContainer.getBoundingClientRect();
+                const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                audio.currentTime = pos * audio.duration;
+                
+                // Обновляем handle
+                const handle = player.querySelector('.track-progress-handle');
+                if (handle) {
+                    handle.style.left = (pos * 100) + '%';
+                }
+            }
+        }
+
+        // Клик по прогресс-бару для перемотки
+        progressContainer.addEventListener('click', updateProgress);
+        
+        // Перетаскивание прогресс-бара
+        let isDragging = false;
+        
+        progressContainer.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            updateProgress(e);
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                updateProgress(e);
+            }
+            if (isVolumeDragging) {
+                updateVolume(e);
+            }
+        });
+        
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            isVolumeDragging = false;
+        });
+
+        // Кнопка звука
+        volumeButton.addEventListener('click', function() {
+            if (audio.muted) {
+                audio.muted = false;
+                volumeIcon.className = 'fas fa-volume-up';
+                volumeBar.style.width = (audio.volume * 100) + '%';
+            } else {
+                audio.muted = true;
+                volumeIcon.className = 'fas fa-volume-mute';
+                volumeBar.style.width = '0%';
+            }
+        });
+
+        // Функция для обновления громкости
+        function updateVolume(e) {
+            const rect = volumeSlider.getBoundingClientRect();
+            const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            audio.volume = pos;
+            volumeBar.style.width = (pos * 100) + '%';
+            
+            // Обновляем handle
+            const volumeHandle = player.querySelector('.track-volume-handle');
+            if (volumeHandle) {
+                volumeHandle.style.left = (pos * 100) + '%';
+            }
+            
+            if (pos === 0) {
+                volumeIcon.className = 'fas fa-volume-mute';
+                audio.muted = true;
+            } else {
+                volumeIcon.className = 'fas fa-volume-up';
+                audio.muted = false;
+            }
+        }
+
+        // Регулировка громкости
+        volumeSlider.addEventListener('click', updateVolume);
+        
+        // Перетаскивание громкости
+        let isVolumeDragging = false;
+        
+        volumeSlider.addEventListener('mousedown', function(e) {
+            isVolumeDragging = true;
+            updateVolume(e);
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (isVolumeDragging) {
+                updateVolume(e);
+            }
+        });
+        
+        document.addEventListener('mouseup', function() {
+            isVolumeDragging = false;
+        });
+
+        // Обработка ошибок загрузки
+        audio.addEventListener('error', function() {
+            playButton.disabled = true;
+            playButton.style.opacity = '0.3';
+            currentTimeDisplay.textContent = 'Ошибка';
+        });
+    });
+});
+</script>
+{% endblock %} 

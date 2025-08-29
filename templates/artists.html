@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Artists - Carnage Music{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Background with texture like original */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1a1a1a;
+        background-image: url('https://carnagemusic.com/wp-content/uploads/2020/12/fon_lenty_radiatsiia_18526_2560x1080.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        opacity: 0.8;
+        z-index: -2;
+    }
+
+    /* Artists Grid */
+    .artists-container {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .artists-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 610px);
+        gap: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .artist-card {
+        background: transparent;
+        border-radius: 0;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        position: relative;
+        width: 610px;
+        height: 610px;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .artist-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .artist-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .artist-card:hover .artist-image {
+        transform: scale(1.02);
+    }
+
+    .artist-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .artist-card:hover .artist-info {
+        transform: translateY(100%);
+    }
+
+    .artist-name {
+        font-family: 'Wadik', Sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: #cccccc;
+    }
+
+    .empty-state h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #ffffff;
+    }
+
+    .empty-state p {
+        font-size: 16px;
+        margin-bottom: 25px;
+    }
+
+    .empty-state a {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #ffffff;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: transform 0.3s ease;
+        margin: 0 10px;
+    }
+
+    .empty-state a:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .artists-grid {
+            grid-template-columns: repeat(auto-fill, 400px);
+            gap: 0;
+            padding: 0;
+        }
+
+        .artist-card {
+            width: 400px;
+            height: 400px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .artists-grid {
+            grid-template-columns: repeat(auto-fill, 300px);
+            gap: 0;
+            padding: 0;
+        }
+
+        .artist-card {
+            width: 300px;
+            height: 300px;
+        }
+
+        .artist-name {
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .artists-grid {
+            grid-template-columns: repeat(auto-fill, 250px);
+            gap: 0;
+            padding: 0;
+        }
+
+        .artist-card {
+            width: 250px;
+            height: 250px;
+        }
+
+        .artist-name {
+            font-size: 18px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Main Content -->
+<main class="main-content">
+    <div class="artists-container">
+        <div id="artistsGrid" class="artists-grid">
+            {% if artists %}
+                {% for artist in artists %}
+                <a href="{% url 'artists:artist_detail' artist.slug %}" class="artist-card">
+                    <img src="{% if artist.photo %}{{ artist.photo.url }}{% else %}https://via.placeholder.com/400x400/333333/ffffff?text={{ artist.name|urlencode }}{% endif %}" 
+                         alt="{{ artist.name }}" 
+                         class="artist-image"
+                         onerror="this.src='https://via.placeholder.com/400x400/333333/ffffff?text={{ artist.name|urlencode }}';">
+                    
+                    <div class="artist-info">
+                        <h3 class="artist-name">{{ artist.name }}</h3>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <h3>Артисты не добавлены</h3>
+                    <p>Добавьте первого артиста через админ панель</p>
+                    <a href="/django-admin/" target="_blank">Django Админка</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Artists page functionality complete
+    console.log('Artists page loaded successfully');
+</script>
+{% endblock %} 

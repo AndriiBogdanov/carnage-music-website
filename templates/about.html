@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About – Carnage Music{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основной контейнер */
+    .about-container {
+        min-height: 100vh;
+        background: #1a1a1a;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+        padding-top: 80px; /* Отступ для фиксированного header */
+    }
+
+    /* Размытый фон */
+    .blurred-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #1a1a1a;
+        background-image: url('https://carnagemusic.com/wp-content/uploads/2020/12/fon_lenty_radiatsiia_18526_2560x1080.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        opacity: 0.8;
+        z-index: 0;
+    }
+
+    /* Основная секция */
+    .main-content-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 80px);
+        padding: 60px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Стильный заголовок */
+    .metal-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 48px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 60px;
+        text-align: center;
+        background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 50%, #b0b0b0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 
+            0 2px 4px rgba(0, 0, 0, 0.3),
+            0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
+        animation: subtleGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes subtleGlow {
+        0%, 100% { 
+            filter: brightness(1) contrast(1.1);
+            transform: scale(1);
+        }
+        50% { 
+            filter: brightness(1.1) contrast(1.2);
+            transform: scale(1.02);
+        }
+    }
+
+    /* Секция About */
+    .about-section {
+        max-width: 900px;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .about-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 40px;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .about-description {
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        line-height: 1.8;
+        color: #ffffff;
+        text-align: justify;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .about-description p {
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.8px;
+    }
+
+    /* Социальные иконки */
+    .social-section {
+        margin-top: 60px;
+        text-align: center;
+    }
+
+    .social-icons-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 30px;
+    }
+
+    .social-icons-row {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .social-icons-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .social-icon {
+        color: #ffffff;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        padding: 6px;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        will-change: transform, box-shadow, background;
+        backface-visibility: hidden;
+    }
+
+    .social-icon:hover {
+        color: #cccccc;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px) scale(1.1);
+    }
+
+    /* Копирайт */
+    .copyright {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        color: #cccccc;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Beatport SVG icon */
+    .beatport-icon {
+        fill: currentColor;
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .metal-title {
+            font-size: 36px;
+        }
+
+        .about-title {
+            font-size: 28px;
+        }
+
+        .about-description {
+            font-size: 16px;
+        }
+
+        .social-icons-container {
+            gap: 6px;
+        }
+
+        .social-icons-row {
+            gap: 10px;
+        }
+
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-content-section {
+            padding: 40px 15px;
+        }
+
+        .metal-title {
+            font-size: 28px;
+        }
+
+        .about-title {
+            font-size: 24px;
+        }
+
+        .about-description {
+            font-size: 14px;
+        }
+
+        .social-icons-container {
+            gap: 5px;
+        }
+
+        .social-icons-row {
+            gap: 8px;
+        }
+
+        .social-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 14px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    <!-- Размытый фон -->
+    <div class="blurred-background"></div>
+
+    <!-- Основная секция -->
+    <div class="main-content-section">
+        <!-- Металлический заголовок -->
+        <div class="metal-title">Carnage Music</div>
+
+        <!-- Секция About -->
+        <div class="about-section">
+            <div class="about-title">About</div>
+            <div class="about-description">
+                <p>Carnage Music Label is a dynamic force in the electronic music industry, championing cutting-edge artists and groundbreaking sounds. Our mission is to elevate the genre and bring fresh, innovative music to the forefront. Based in Ukraine, we have a global reach, connecting with audiences worldwide, including the vibrant American market.</p>
+                
+                <p>At Carnage Music Label, we believe in the power of creativity and the importance of nurturing talent. Our artists are dedicated to pushing the boundaries of electronic music, delivering unique and unforgettable experiences. We are passionate about our work and committed to supporting our artists' growth and success.</p>
+                
+                <p>Join us on our journey as we continue to redefine the electronic music scene and bring exceptional music to fans across the United States and beyond.</p>
+            </div>
+        </div>
+
+        <!-- Социальные иконки -->
+        <div class="social-section">
+            <div class="social-icons-container">
+                <div class="social-icons-row">
+                    <a href="https://www.facebook.com/profile.php?id=61567616762007" class="social-icon" target="_blank" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/crngmusic/" class="social-icon" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@the.world.is.my0?_t=8rEKf0UpaPI&_r=1" class="social-icon" target="_blank" aria-label="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://soundcloud.com/carnagemusiclabel" class="social-icon" target="_blank" aria-label="SoundCloud">
+                        <i class="fab fa-soundcloud"></i>
+                    </a>
+                    <a href="https://www.beatport.com/label/crng-music/126103" class="social-icon" target="_blank" aria-label="Beatport">
+                        <svg class="beatport-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1036 1200">
+                            <path d="M817.7,763.3c0,120-95.8,217-217,217c-120,0-215.8-94.6-215.8-217c0-57.6,21.8-108.5,56.4-146.7L294.6,763.3 l-77-77l165.5-163.7c22.4-22.4,33.9-51.5,33.9-83.6V233.6h108.5V439c0,63-22.4,116.4-66.1,160l-4.9,4.8 c38.2-35.2,90.3-56.4,146.1-56.4C723.8,547.5,817.7,645.1,817.7,763.3z M719.5,763.3c0-64.3-53.3-116.4-118.8-116.4 c-66.1,0-117.6,54.6-117.6,116.4c0,63.6,52.1,117.6,117.6,117.6C668.6,880.9,719.5,825.8,719.5,763.3z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCyLr2UcaesVcRq5I2VRuqPA" class="social-icon" target="_blank" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+                <div class="social-icons-row">
+                    <a href="#" class="social-icon" target="_blank" aria-label="Spotify">
+                        <i class="fab fa-spotify"></i>
+                    </a>
+                    <a href="#" class="social-icon" target="_blank" aria-label="Apple Music">
+                        <i class="fab fa-apple"></i>
+                    </a>
+                    <a href="#" class="social-icon" target="_blank" aria-label="Bandcamp">
+                        <i class="fab fa-bandcamp"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Копирайт -->
+            <div class="copyright">©2025 CARNAGE MUSIC</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

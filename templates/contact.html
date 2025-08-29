@@ -1,0 +1,388 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact – Carnage Music{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основной контейнер */
+    .contact-container {
+        min-height: 100vh;
+        background: #1a1a1a;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+        padding-top: 80px; /* Отступ для фиксированного header */
+    }
+
+    /* Размытый фон */
+    .blurred-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #1a1a1a;
+        background-image: url('https://carnagemusic.com/wp-content/uploads/2020/12/fon_lenty_radiatsiia_18526_2560x1080.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        opacity: 0.8;
+        z-index: 0;
+    }
+
+    /* Основная секция */
+    .main-content-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 80px);
+        padding: 40px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Основная рамка */
+    .contact-frame {
+        width: 100%;
+        max-width: 1200px;
+        background: #2a2a2a;
+        border: 1px solid #666666;
+        border-radius: 5px;
+        padding: 50px;
+        display: flex;
+        gap: 60px;
+    }
+
+    /* Левая колонка - Адрес */
+    .address-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .address-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    .company-name {
+        font-family: 'Wadik', sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+    }
+
+    .inquiry-section {
+        margin-bottom: 30px;
+    }
+
+    .inquiry-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .inquiry-email {
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Правая колонка - Форма */
+    .booking-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .booking-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        font-family: 'Wadik', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        background: #333333;
+        border: 1px solid #666666;
+        border-radius: 3px;
+        color: #ffffff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #ffffff;
+    }
+
+    .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        background: #333333;
+        border: 1px solid #666666;
+        border-radius: 3px;
+        color: #ffffff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        min-height: 120px;
+        resize: vertical;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-textarea:focus {
+        outline: none;
+        border-color: #ffffff;
+    }
+
+    .send-button {
+        background: #cccccc;
+        color: #000000;
+        border: none;
+        padding: 15px 40px;
+        font-family: 'Wadik', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .send-button:hover {
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .contact-frame {
+            flex-direction: column;
+            padding: 30px 20px;
+            gap: 40px;
+        }
+
+        .address-title,
+        .booking-title {
+            font-size: 28px;
+        }
+
+        .company-name {
+            font-size: 20px;
+        }
+
+        .inquiry-title {
+            font-size: 16px;
+        }
+
+        .inquiry-email {
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-content-section {
+            padding: 20px 15px;
+        }
+
+        .contact-frame {
+            padding: 20px 15px;
+        }
+
+        .address-title,
+        .booking-title {
+            font-size: 24px;
+        }
+
+        .company-name {
+            font-size: 18px;
+        }
+    }
+
+    /* Social icons styles */
+    .social-section {
+        text-align: center;
+        margin-top: 40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .social-icon {
+        color: #ffffff;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        padding: 6px;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        will-change: transform, box-shadow, background;
+        backface-visibility: hidden;
+    }
+
+    .social-icon:hover {
+        color: #cccccc;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px) scale(1.1);
+    }
+
+    /* Copyright under social icons */
+    .copyright {
+        font-size: 11px;
+        color: #ffffff;
+        letter-spacing: 2.5px;
+        font-weight: 900;
+        font-family: 'Gothic', monospace;
+    }
+
+    /* Beatport SVG icon */
+    .beatport-icon {
+        fill: currentColor;
+        width: 14px;
+        height: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contact-container">
+    <!-- Размытый фон -->
+    <div class="blurred-background"></div>
+
+    <!-- Основная секция -->
+    <div class="main-content-section">
+        <div class="contact-frame">
+            <!-- Левая колонка - Адрес -->
+            <div class="address-column">
+                <div class="address-title">Address</div>
+                <div class="company-name">Carnage Music Label</div>
+                
+                <div class="inquiry-section">
+                    <div class="inquiry-title">General Inquiries</div>
+                    <div class="inquiry-email">contact@carnagemusic.com</div>
+                </div>
+                
+                <div class="inquiry-section">
+                    <div class="inquiry-title">Interested in Joining Us ?</div>
+                    <div class="inquiry-email">jobs@carnagemusic.com</div>
+                </div>
+            </div>
+
+            <!-- Правая колонка - Форма -->
+            <div class="booking-column">
+                <div class="booking-title">Booking</div>
+                
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Your Name (Required)</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Your Email (Required)</label>
+                        <input type="email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Your Message</label>
+                        <textarea class="form-textarea" rows="5"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="send-button">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Social Section -->
+    <div class="social-section">
+        <div class="social-icons">
+            <a href="https://www.facebook.com/profile.php?id=61567616762007" class="social-icon" target="_blank" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.instagram.com/crngmusic/" class="social-icon" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@the.world.is.my0?_t=8rEKf0UpaPI&_r=1" class="social-icon" target="_blank" aria-label="TikTok">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://soundcloud.com/carnagemusiclabel" class="social-icon" target="_blank" aria-label="SoundCloud">
+                <i class="fab fa-soundcloud"></i>
+            </a>
+            <a href="https://www.beatport.com/label/crng-music/126103" class="social-icon" target="_blank" aria-label="Beatport">
+                <svg class="beatport-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1036 1200">
+                    <path d="M817.7,763.3c0,120-95.8,217-217,217c-120,0-215.8-94.6-215.8-217c0-57.6,21.8-108.5,56.4-146.7L294.6,763.3 l-77-77l165.5-163.7c22.4-22.4,33.9-51.5,33.9-83.6V233.6h108.5V439c0,63-22.4,116.4-66.1,160l-4.9,4.8 c38.2-35.2,90.3-56.4,146.1-56.4C723.8,547.5,817.7,645.1,817.7,763.3z M719.5,763.3c0-64.3-53.3-116.4-118.8-116.4 c-66.1,0-117.6,54.6-117.6,116.4c0,63.6,52.1,117.6,117.6,117.6C668.6,880.9,719.5,825.8,719.5,763.3z"/>
+                </svg>
+            </a>
+            <a href="https://www.youtube.com/channel/UCyLr2UcaesVcRq5I2VRuqPA" class="social-icon" target="_blank" aria-label="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" class="social-icon" target="_blank" aria-label="Spotify">
+                <i class="fab fa-spotify"></i>
+            </a>
+            <a href="#" class="social-icon" target="_blank" aria-label="Apple Music">
+                <i class="fab fa-apple"></i>
+            </a>
+            <a href="#" class="social-icon" target="_blank" aria-label="Bandcamp">
+                <i class="fab fa-bandcamp"></i>
+            </a>
+        </div>
+        <div class="copyright">
+            ©2025 CARNAGE MUSIC
+        </div>
+    </div>
+  {% endblock %}

@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Carnage Music Admin{% endblock %}
+
+{% block extrastyle %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    @font-face {
+        font-family: 'Wadik';
+        src: url('{% static "wadik/Wadik.otf" %}') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'admin/css/carnage_admin.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+<script src="{% static 'admin/js/carnage_admin.js' %}"></script>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <span style="font-family: 'Wadik', sans-serif; letter-spacing: 2px;">🎵 CARNAGE MUSIC</span>
+    <span style="font-size: 14px; opacity: 0.8; margin-left: 10px;">ADMIN PANEL</span>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div style="display: flex; align-items: center; gap: 20px;">
+    <a href="/" style="color: white; text-decoration: none; font-size: 12px; opacity: 0.8;">
+        ← Вернуться на сайт
+    </a>
+    <span style="color: rgba(255,255,255,0.5);">|</span>
+    <span style="font-size: 12px; opacity: 0.6;">Underground Music Label 2025</span>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5); font-size: 12px;">
+    <p>🎵 Carnage Music - Underground Music Label</p>
+    <p>Powered by Django Admin | Custom Styled for Carnage Music</p>
+</div>
+{% endblock %} 

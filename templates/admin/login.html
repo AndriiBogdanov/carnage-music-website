@@ -1,0 +1,46 @@
+{% extends "admin/login.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    @font-face {
+        font-family: 'Wadik';
+        src: url('{% static "wadik/Wadik.otf" %}') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'admin/css/carnage_admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="https://carnagemusic.com/wp-content/uploads/2024/10/Carnage-Logo-Full.png" 
+             alt="Carnage Music" 
+             style="max-width: 300px; height: auto; margin-bottom: 20px;">
+        <div style="font-family: 'Wadik', sans-serif; font-size: 24px; letter-spacing: 3px; color: #ff6b35;">
+            ADMIN PANEL
+        </div>
+        <div style="font-size: 14px; opacity: 0.7; margin-top: 10px;">
+            Underground Music Label 2025
+        </div>
+    </div>
+</h1>
+{% endblock %}
+
+{% block content %}
+<div style="background: rgba(255, 255, 255, 0.02); border-radius: 16px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);">
+    {{ block.super }}
+</div>
+{% endblock %}
+
+{% block footer %}
+<div style="text-align: center; margin-top: 30px; color: rgba(255,255,255,0.5); font-size: 12px;">
+    <p>🎵 Carnage Music - Secure Admin Access</p>
+    <p>Powered by Django | Custom Styled for Carnage Music</p>
+</div>
+{% endblock %} 

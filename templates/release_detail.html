@@ -1,0 +1,477 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ release.catalog_number }}: {{ release.artist.name }} – Carnage Music{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основной контейнер */
+    .release-detail-container {
+        min-height: 100vh;
+        background: #1a1a1a;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+        padding-top: 80px; /* Отступ для фиксированного header */
+    }
+
+    /* Размытый фон с обложкой */
+    .blurred-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        filter: blur(20px) brightness(0.3);
+        z-index: 0;
+    }
+
+    /* Центральная обложка */
+    .album-cover-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        padding: 100px 20px 60px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .album-cover {
+        width: 350px;
+        height: 350px;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        overflow: hidden;
+        z-index: 2;
+    }
+
+    .album-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Нижняя секция с информацией */
+    .info-section {
+        background: rgba(42, 42, 42, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 40px 20px;
+        position: relative;
+        z-index: 3;
+    }
+
+    .info-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Заголовок релиза */
+    .release-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .release-catalog {
+        font-family: 'Wadik', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+    }
+
+    .release-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Список треков */
+    .tracks-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 30px 0;
+    }
+
+    .track-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .track-item:last-child {
+        border-bottom: none;
+    }
+
+    .track-play-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 10px;
+        color: #000000;
+        background: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .track-play-icon:hover {
+        background: #cccccc;
+        transform: scale(1.1);
+    }
+
+    .track-info {
+        flex: 1;
+        font-family: 'Wadik', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .track-platforms {
+        display: flex;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .platform-icon {
+        width: 20px;
+        height: 20px;
+        background: #000000;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 10px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .platform-icon:hover {
+        background: #333333;
+        transform: scale(1.1);
+    }
+
+    /* Описание */
+    .description {
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        line-height: 1.8;
+        color: #ffffff;
+        text-align: justify;
+        margin-bottom: 30px;
+    }
+
+    .description p {
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    /* Разделительная линия */
+    .separator {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 30px 0;
+    }
+
+    /* Кнопка "Назад" */
+    .back-button {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #cccccc;
+        color: #000000;
+        text-decoration: none;
+        border-radius: 5px;
+        font-family: 'Wadik', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .back-button:hover {
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .back-button-container {
+        text-align: center;
+    }
+
+    /* Скролл-индикатор */
+    .scroll-indicator {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+
+    .scroll-indicator:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .album-cover {
+            width: 280px;
+            height: 280px;
+        }
+
+        .album-cover-section {
+            min-height: 60vh;
+            padding: 80px 20px 40px;
+        }
+
+        .release-catalog {
+            font-size: 20px;
+        }
+
+        .release-title {
+            font-size: 18px;
+        }
+
+        .track-info {
+            font-size: 14px;
+        }
+
+        .description {
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .album-cover {
+            width: 220px;
+            height: 220px;
+        }
+
+        .album-cover-section {
+            min-height: 50vh;
+            padding: 70px 15px 30px;
+        }
+
+        .info-section {
+            padding: 30px 15px;
+        }
+
+        .track-play-icon {
+            width: 20px;
+            height: 20px;
+            font-size: 10px;
+            margin-right: 15px;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const blurredBackground = document.querySelector('.blurred-background');
+    const coverUrl = '{{ release.cover.url|default:"" }}';
+    
+    if (coverUrl) {
+        blurredBackground.style.backgroundImage = "url('" + coverUrl + "')";
+    } else {
+        blurredBackground.style.background = "linear-gradient(45deg, #2a2a2a, #1a1a1a)";
+    }
+
+    // Скролл наверх
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Глобальная переменная для текущего аудио
+    let currentAudio = null;
+    let currentPlayButton = null;
+
+    // Проверяем, что функция загружена
+    console.log('JavaScript загружен, функция playTrack доступна');
+
+    // Добавляем обработчики для кнопок play
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.track-play-icon')) {
+            const playButton = e.target.closest('.track-play-icon');
+            const audioUrl = playButton.getAttribute('data-audio-url');
+            if (audioUrl) {
+                playTrack(audioUrl, playButton);
+            }
+        }
+    });
+
+    // Функция для проигрывания трека
+    function playTrack(audioUrl, playButton) {
+        console.log('playTrack вызвана с URL:', audioUrl);
+        
+        const playIcon = playButton.querySelector('i');
+        console.log('Найдена иконка:', playIcon);
+        
+        // Если уже играет этот трек, останавливаем
+        if (currentAudio && currentAudio.src.includes(audioUrl)) {
+            console.log('Останавливаем текущий трек');
+            currentAudio.pause();
+            currentAudio = null;
+            currentPlayButton = null;
+            playIcon.className = 'fas fa-play';
+            return;
+        }
+        
+        // Если играет другой трек, останавливаем его
+        if (currentAudio) {
+            console.log('Останавливаем предыдущий трек');
+            currentAudio.pause();
+            if (currentPlayButton) {
+                currentPlayButton.querySelector('i').className = 'fas fa-play';
+            }
+        }
+        
+        // Создаем новый аудио элемент
+        console.log('Создаем новый аудио элемент');
+        currentAudio = new Audio(audioUrl);
+        currentPlayButton = playButton;
+        
+        // Меняем иконку на паузу
+        playIcon.className = 'fas fa-pause';
+        
+        // Проигрываем трек
+        currentAudio.play().then(() => {
+            console.log('Трек начал играть');
+        }).catch(error => {
+            console.error('Ошибка при проигрывании:', error);
+            playIcon.className = 'fas fa-play';
+        });
+        
+        // Когда трек закончился, возвращаем иконку play
+        currentAudio.onended = function() {
+            console.log('Трек закончился');
+            playIcon.className = 'fas fa-play';
+            currentAudio = null;
+            currentPlayButton = null;
+        };
+        
+        // При ошибке возвращаем иконку play
+        currentAudio.onerror = function() {
+            console.error('Ошибка аудио');
+            playIcon.className = 'fas fa-play';
+            currentAudio = null;
+            currentPlayButton = null;
+        };
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="release-detail-container">
+    <!-- Размытый фон -->
+    <div class="blurred-background"></div>
+
+    <!-- Центральная обложка -->
+    <div class="album-cover-section">
+        <div class="album-cover">
+            {% if release.cover %}
+                <img src="{{ release.cover.url }}" alt="{{ release.title }}">
+            {% else %}
+                <div style="width:100%;height:100%;background:#333;display:flex;align-items:center;justify-content:center;">
+                    <span style="color:#666;font-size:14px;">No Cover</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Нижняя секция с информацией -->
+    <div class="info-section">
+        <div class="info-content">
+            <!-- Заголовок релиза -->
+            <div class="release-header">
+                <div class="release-catalog">{{ release.catalog_number|upper }}: {{ release.artist.name|upper }}</div>
+                <div class="release-title">{{ release.title|upper }}</div>
+            </div>
+
+            <!-- Список треков -->
+            <ul class="tracks-list">
+                {% for track in tracks %}
+                <li class="track-item">
+                    {% if track.audio_file %}
+                        <div class="track-play-icon" data-audio-url="{{ track.audio_file.url }}">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    {% else %}
+                        <div class="track-play-icon" style="opacity: 0.3; cursor: default;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    {% endif %}
+                    <div class="track-info">{{ forloop.counter }} {{ track.title }}</div>
+                    <div class="track-platforms">
+                        {% if track.youtube_url %}
+                            <a href="{{ track.youtube_url }}" class="platform-icon" title="YouTube" target="_blank">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        {% endif %}
+                        {% if track.spotify_url %}
+                            <a href="{{ track.spotify_url }}" class="platform-icon" title="Spotify" target="_blank">
+                                <i class="fab fa-spotify"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Описание -->
+            {% if release.description %}
+            <div class="description">
+                {{ release.description|linebreaks }}
+            </div>
+            {% endif %}
+
+            <!-- Разделительная линия -->
+            <div class="separator"></div>
+
+            <!-- Кнопка "Назад" -->
+            <div class="back-button-container">
+                <a href="{% url 'music:releases' %}" class="back-button">Back</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скролл-индикатор -->
+    <div class="scroll-indicator">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+</div>
+{% endblock %} 

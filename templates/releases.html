@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Releases - Carnage Music{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основной контейнер */
+    .releases-container {
+        min-height: 100vh;
+        background: #2a2a2a;
+        color: #ffffff;
+        padding: 80px 0 0; /* Отступ сверху равный высоте хедера */
+        overflow-x: hidden;
+    }
+
+    /* Сетка релизов */
+    .releases-grid {
+        max-width: 1400px;
+        margin: 0; /* Убираем центрирование */
+        padding: 0; /* Убираем все отступы для позиционирования у самого края */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+        gap: 40px;
+        justify-items: start; /* Выравниваем карточки по левому краю */
+    }
+
+    /* Карточка релиза */
+    .release-card {
+        background: transparent;
+        border: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        width: 440px; /* Фиксированная ширина карточки */
+        height: auto; /* Автоматическая высота для включения текста */
+        margin: 0; /* Убираем центрирование, чтобы карточка была в левом углу */
+    }
+
+    .release-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Обложка релиза */
+    .release-cover {
+        position: relative;
+        width: 440px; /* Фиксированная ширина обложки */
+        height: 400px; /* Высота обложки, чтобы с текстом получилось 440px */
+        overflow: hidden;
+        margin-bottom: 0; /* Убираем отступ снизу */
+    }
+
+    .release-cover img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%);
+        transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .release-card:hover .release-cover img {
+        filter: grayscale(0%);
+        transform: scale(1.05);
+    }
+
+    /* Информация о релизе */
+    .release-info {
+        position: static; /* Убираем абсолютное позиционирование */
+        padding: 15px 0; /* Добавляем отступы сверху и снизу */
+        background: transparent; /* Убираем градиентный фон */
+        text-align: center; /* Центрируем текст */
+    }
+
+    .release-catalog {
+        font-family: 'Wadik', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: #cccccc; /* Делаем заголовок серым */
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+        line-height: 1.2;
+    }
+
+    .release-title {
+        font-family: 'Wadik', sans-serif;
+        font-size: 18px; /* Увеличиваем шрифт подзаголовка */
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+        line-height: 1.2;
+    }
+
+    /* Ссылка на релиз */
+    .release-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    .release-link:hover {
+        color: inherit;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 1200px) {
+        .releases-grid {
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 30px;
+            padding: 0; /* Убираем отступы */
+        }
+        
+        .release-card {
+            width: 420px; /* Меньший размер для планшетов */
+            height: auto;
+        }
+        
+        .release-cover {
+            width: 420px; /* Меньший размер для планшетов */
+            height: 380px; /* Высота обложки для общей высоты 420px */
+        }
+    }
+
+    @media (max-width: 768px) {
+        .releases-container {
+            padding: 80px 0 0; /* Сохраняем отступ от хедера */
+        }
+
+        .releases-grid {
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            padding: 0; /* Убираем отступы */
+        }
+        
+        .release-card {
+            width: 380px; /* Меньший размер для мобильных */
+            height: auto;
+        }
+        
+        .release-cover {
+            width: 380px; /* Меньший размер для мобильных */
+            height: 340px; /* Высота обложки для общей высоты 380px */
+        }
+
+        .release-catalog {
+            font-size: 12px;
+            color: #cccccc; /* Сохраняем серый цвет */
+        }
+
+        .release-title {
+            font-size: 16px; /* Увеличиваем шрифт подзаголовка */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .releases-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 0; /* Убираем отступы */
+        }
+        
+        .release-card {
+            width: 340px; /* Еще меньший размер для маленьких экранов */
+            height: auto;
+        }
+        
+        .release-cover {
+            width: 340px; /* Еще меньший размер для маленьких экранов */
+            height: 300px; /* Высота обложки для общей высоты 340px */
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="releases-container">
+    <div class="releases-grid">
+        {% for release in releases %}
+        <div class="release-card">
+            <a href="{% url 'music:release_detail' release.slug %}" class="release-link">
+                <div class="release-cover">
+                    {% if release.cover %}
+                        <img src="{{ release.cover.url }}" alt="{{ release.title }}" loading="lazy">
+                    {% else %}
+                        <div style="width:100%;height:100%;background:#333;display:flex;align-items:center;justify-content:center;">
+                            <span style="color:#666;font-size:14px;">No Cover</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Информация о релизе под обложкой -->
+                <div class="release-info">
+                    <div class="release-catalog">
+                        {% if release.catalog_number %}
+                            {{ release.catalog_number|upper }}: {{ release.artist.name|upper }}
+                        {% else %}
+                            CRNG {{ forloop.counter|stringformat:"03d" }}: {{ release.artist.name|upper }}
+                        {% endif %}
+                    </div>
+                    <div class="release-title">
+                        {{ release.title|upper }}
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+            <h2 style="font-family: 'Wadik', sans-serif; font-size: 24px; color: #ffffff; margin-bottom: 20px;">
+                No Releases Available
+            </h2>
+            <p style="color: #cccccc; font-size: 16px;">
+                Releases will appear here once they are added to the database.
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 
