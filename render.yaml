@@ -3,12 +3,8 @@ services:
     name: carnage-music-website
     env: python
     plan: free
-    buildCommand: |
-      pip install -r requirements.txt
-      python manage.py migrate
-      python manage.py collectstatic --noinput
-      python create_superuser.py
-    startCommand: gunicorn carnage_music_project.wsgi:application
+    buildCommand: pip install -r requirements.txt
+    startCommand: chmod +x start.sh && ./start.sh
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0

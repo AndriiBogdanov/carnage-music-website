@@ -143,10 +143,7 @@ STATICFILES_DIRS = [
 ]
 
 # Настройка для whitenoise (для продакшена)
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 # Media files (uploads)
 MEDIA_URL = '/media/'
