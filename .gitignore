@@ -137,8 +137,8 @@ db.sqlite3-journal
 # Django static files
 staticfiles/
 
-# Media files
-media/
+# Media files - ОСТАВЛЯЕМ ВСЕ МЕДИА
+# media/
 
 # IDE
 .vscode/

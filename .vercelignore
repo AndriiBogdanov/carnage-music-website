@@ -4,8 +4,8 @@ carnage_website_backup_full/
 carnage_website_backup_20250808_113453.tar.gz
 carnage_website_backup_report.md
 
-# Media files (uploads)
-media/
+# Media files (uploads) - ОСТАВЛЯЕМ ВСЕ МЕДИА
+# media/
 
 # Large HTML files
 outer-html-*.txt
