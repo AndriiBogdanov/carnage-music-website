@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
     'www.carnagemusic.com',
     '.pythonanywhere.com',  # Для PythonAnywhere
     '.pythoneverywhere.com',  # Альтернативный домен
+    '.onrender.com',  # Для Render
 ]
 
 
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Для статических файлов
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -139,6 +141,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+# Настройка для whitenoise (для продакшена)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (uploads)
 MEDIA_URL = '/media/'

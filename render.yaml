@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: carnage-music-website
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn carnage_music_project.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: carnage_music_project.settings
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
