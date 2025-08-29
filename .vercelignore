@@ -1,0 +1,40 @@
+# Backup files
+carnage_website_backup/
+carnage_website_backup_full/
+carnage_website_backup_20250808_113453.tar.gz
+carnage_website_backup_report.md
+
+# Media files (uploads)
+media/
+
+# Large HTML files
+outer-html-*.txt
+OTER_HTML_MAIN_PAGE.rtf
+outer_html_main-page.txt
+
+# Documentation files
+README_*.md
+DJANGO_*.md
+ИНСТРУКЦИЯ_*.md
+
+# Backup scripts
+backup_compress.sh
+view_backup.sh
+
+# Development files
+.DS_Store
+*.pyc
+__pycache__/
+.env
+
+# Git
+.git/
+.gitignore
+
+# Other deployment files
+render.yaml
+RENDER_DEPLOY.md
+build.sh
+start.sh
+requirements_minimal.txt
+DEPLOY_INSTRUCTIONS.md

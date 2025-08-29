@@ -159,3 +159,19 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Large backup files for Vercel
+carnage_website_backup/
+carnage_website_backup_full/
+carnage_website_backup_20250808_113453.tar.gz
+carnage_website_backup_report.md
+
+# Large HTML files
+outer-html-*.txt
+OTER_HTML_MAIN_PAGE.rtf
+outer_html_main-page.txt
+
+# Documentation files
+README_*.md
+DJANGO_*.md
+ИНСТРУКЦИЯ_*.md
