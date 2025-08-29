@@ -1,0 +1,27 @@
+{
+  "builds": [
+    {
+      "src": "carnage_music_project/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/media/(.*)",
+      "dest": "/media/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "carnage_music_project/wsgi.py"
+    }
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "carnage_music_project.settings",
+    "DEBUG": "False",
+    "ALLOWED_HOSTS": ".vercel.app"
+  }
+}

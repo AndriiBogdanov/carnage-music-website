@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '.pythonanywhere.com',  # Для PythonAnywhere
     '.pythoneverywhere.com',  # Альтернативный домен
     '.onrender.com',  # Для Render
+    '.vercel.app',  # Для Vercel
 ]
 
 
