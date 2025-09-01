@@ -27,4 +27,4 @@ databases:
   - name: carnage-music-db-new
     databaseName: carnage_music_new
     user: carnage_user_new
-    plan: developer
+    plan: starter
