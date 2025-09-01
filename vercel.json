@@ -15,6 +15,10 @@
       "dest": "/media/$1"
     },
     {
+      "src": "/admin/(.*)",
+      "dest": "carnage_music_project/wsgi.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "carnage_music_project/wsgi.py"
     }
@@ -23,5 +27,10 @@
     "DJANGO_SETTINGS_MODULE": "carnage_music_project.settings",
     "DEBUG": "False",
     "ALLOWED_HOSTS": ".vercel.app"
+  },
+  "functions": {
+    "carnage_music_project/wsgi.py": {
+      "maxDuration": 30
+    }
   }
 }

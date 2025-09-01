@@ -1,0 +1,59 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media files (оставляем для продакшена)
+# media/
+
+# Static files (соберем заново)
+staticfiles/
+
+# Documentation
+README_*.md
+DJANGO_*.md
+ИНСТРУКЦИЯ_*.md
+*.md
+
+# Backup files
+carnage_website_backup*
+*.tar.gz
+*.backup
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+

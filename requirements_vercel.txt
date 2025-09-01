@@ -4,3 +4,4 @@ python-decouple==3.8
 pillow==11.0.0
 djangorestframework==3.16.1
 django-cors-headers==4.7.0
+gunicorn==21.2.0
