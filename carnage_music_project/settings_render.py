@@ -132,7 +132,7 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "https://carnagemusic.com",
     "https://www.carnagemusic.com",
-    "https://carnage-music-website.onrender.com",
+    "https://carnage-music-website-new.onrender.com",
 ]
 
 # Security settings
