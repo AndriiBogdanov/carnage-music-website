@@ -4,7 +4,7 @@ services:
     env: python
     plan: starter
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: python manage.py makemigrations && python manage.py migrate --fake-initial && python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@carnagemusic.com', 'admin123') if not User.objects.filter(username='admin').exists() else None" && gunicorn carnage_music_project.wsgi:application --bind 0.0.0.0:$PORT
+    startCommand: python manage.py makemigrations && python manage.py migrate artists 0001 --fake && python manage.py migrate artists 0002 --fake && python manage.py migrate && python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@carnagemusic.com', 'admin123') if not User.objects.filter(username='admin').exists() else None" && gunicorn carnage_music_project.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
