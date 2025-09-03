@@ -67,18 +67,30 @@ class Artist(models.Model):
         super().save(*args, **kwargs)
         
         # Оптимизация фото
-        if self.photo:
-            img = Image.open(self.photo.path)
-            if img.height > 500 or img.width > 500:
-                img.thumbnail((500, 500))
-                img.save(self.photo.path)
+        if self.photo and hasattr(self.photo, 'path') and self.photo.path:
+            try:
+                import os
+                if os.path.exists(self.photo.path):
+                    img = Image.open(self.photo.path)
+                    if img.height > 500 or img.width > 500:
+                        img.thumbnail((500, 500))
+                        img.save(self.photo.path)
+            except Exception as e:
+                # Игнорируем ошибки оптимизации изображений
+                pass
         
         # Оптимизация баннера
-        if self.banner:
-            img = Image.open(self.banner.path)
-            if img.height > 400 or img.width > 1200:
-                img.thumbnail((1200, 400))
-                img.save(self.banner.path)
+        if self.banner and hasattr(self.banner, 'path') and self.banner.path:
+            try:
+                import os
+                if os.path.exists(self.banner.path):
+                    img = Image.open(self.banner.path)
+                    if img.height > 400 or img.width > 1200:
+                        img.thumbnail((1200, 400))
+                        img.save(self.banner.path)
+            except Exception as e:
+                # Игнорируем ошибки оптимизации изображений
+                pass
     
     @property
     def track_count(self):
